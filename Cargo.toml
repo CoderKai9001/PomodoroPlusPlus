@@ -1,0 +1,17 @@
+[package]
+name = "pomodoro-plusplus"
+version = "0.1.0"
+edition = "2021"
+description = "A terminal-based Pomodoro productivity application"
+authors = ["Pomodoro++ Team"]
+
+[[bin]]
+name = "pomodoro-pp"
+path = "src/main.rs"
+
+[dependencies]
+ratatui = "0.28"
+crossterm = "0.28"
+rusqlite = { version = "0.32", features = ["bundled"] }
+chrono = "0.4"
+dirs = "5.0"
