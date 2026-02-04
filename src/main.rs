@@ -1,4 +1,5 @@
 mod app;
+mod ascii_art;
 mod db;
 mod ui;
 

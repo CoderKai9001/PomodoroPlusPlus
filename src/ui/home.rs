@@ -80,7 +80,7 @@ fn render_timer(frame: &mut Frame, app: &App, area: Rect) {
         .margin(1)
         .constraints([
             Constraint::Length(2),  // Mode
-            Constraint::Min(3),     // Timer display
+            Constraint::Min(7),     // Timer display (increased for ASCII art)
             Constraint::Length(3),  // Progress bar
             Constraint::Length(2),  // Status
         ])
@@ -100,22 +100,27 @@ fn render_timer(frame: &mut Frame, app: &App, area: Rect) {
         .alignment(Alignment::Center);
     frame.render_widget(mode, timer_chunks[0]);
     
-    // Timer display
+    // Timer display using ASCII art
     let time_str = app.format_time();
     let timer_color = if app.timer_running { Color::Yellow } else { Color::White };
     
-    // Create large ASCII-style numbers
-    let timer_display = Paragraph::new(vec![
-        Line::from(""),
-        Line::from(Span::styled(
-            format!("  {}  ", time_str),
+    // Convert time to ASCII art
+    let ascii_lines = crate::ascii_art::time_to_ascii_art(&time_str);
+    
+    // Create lines for the ASCII art display
+    let mut display_lines: Vec<Line> = Vec::new();
+    for ascii_line in ascii_lines {
+        display_lines.push(Line::from(Span::styled(
+            ascii_line,
             Style::default()
                 .fg(timer_color)
                 .add_modifier(Modifier::BOLD)
-        )),
-    ])
-    .alignment(Alignment::Center)
-    .style(Style::default().add_modifier(Modifier::BOLD));
+        )));
+    }
+    
+    let timer_display = Paragraph::new(display_lines)
+        .alignment(Alignment::Center)
+        .style(Style::default().add_modifier(Modifier::BOLD));
     frame.render_widget(timer_display, timer_chunks[1]);
     
     // Progress bar
